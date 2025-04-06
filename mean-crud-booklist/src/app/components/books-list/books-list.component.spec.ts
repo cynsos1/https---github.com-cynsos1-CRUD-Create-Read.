@@ -1,25 +1,37 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BookService } from '../../services/book.service';
 
-import { BooksListComponent } from './books-list.component';
 
-describe('BooksListComponent', () => {
-  let component: BooksListComponent;
-  let fixture: ComponentFixture<BooksListComponent>;
+@Component({
+  selector: 'app-books-list',
+  templateUrl: './books-list.component.html'
+})
+export class BooksListComponent implements OnInit {
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ BooksListComponent ]
-    })
-    .compileComponents();
-  });
+  Books: any[] = [];
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BooksListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  constructor(private bookService: BookService, private router: Router) { }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  ngOnInit(): void {
+    this.loadBooks();
+  }
+
+  loadBooks(): void {
+    this.bookService.getBooks().subscribe((data) => {
+      this.Books = data;
+    });
+  }
+
+  editBook(id: string): void {
+    this.router.navigate(['/edit-book', id]);
+  }
+
+  onDelete(id: string): void {
+    if (confirm('Are you sure to delete this book?')) {
+      this.bookService.deleteBook(id).subscribe(() => {
+        this.loadBooks();
+      });
+    }
+  }
+}

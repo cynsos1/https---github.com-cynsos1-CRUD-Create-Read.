@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'dist/angular-mean-crud-tutorial')))
 app.use('/api', bookRoute)
  
 // PORT
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
  
 app.listen(port, () => {
   console.log('Listening on port ' + port)

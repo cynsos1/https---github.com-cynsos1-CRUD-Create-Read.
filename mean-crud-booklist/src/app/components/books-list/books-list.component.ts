@@ -1,34 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-import { CrudService } from './../../service/crud.service';
+import { Router } from '@angular/router';
+import { BookService } from '../../services/book.service';
 
 @Component({
   selector: 'app-books-list',
-  templateUrl: './books-list.component.html',
-  styleUrls: ['./books-list.component.css']
+  templateUrl: './books-list.component.html'
 })
 export class BooksListComponent implements OnInit {
 
-  Books: any = [];
+  Books: any[] = [];
 
-  constructor(private crudService: CrudService) { }
+  constructor(private bookService: BookService, private router: Router) { }
 
   ngOnInit(): void {
-    this.crudService.GetBooks().subscribe(res => {
-      console.log(res);
-      this.Books = res;
+    this.loadBooks();
+  }
+
+  loadBooks(): void {
+    this.bookService.getBooks().subscribe((data) => {
+      this.Books = data;
     });
   }
 
-  // Delete a book
-  onDelete(id: any): any {
-    this.crudService.DeleteBook(id)
-      .subscribe(res => {
-        console.log(res);
+  // Add this method clearly
+  editBook(id: string): void {
+    this.router.navigate(['/edit-book', id]);
+  }
 
-        // Optionally refresh the list after deletion
-        this.crudService.GetBooks().subscribe(updatedList => {
-          this.Books = updatedList;
-        });
+  onDelete(id: string): void {
+    if (confirm('Are you sure to delete this book?')) {
+      this.bookService.deleteBook(id).subscribe(() => {
+        this.loadBooks();
       });
+    }
   }
 }
