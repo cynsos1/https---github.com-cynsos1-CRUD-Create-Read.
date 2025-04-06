@@ -8,11 +8,15 @@ import { BooksListComponent } from './components/books-list/books-list.component
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AddBooComponent } from './components/add-boo/add-boo.component';
+import { AddBookComponent } from './components/add-book/add-book.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BooksListComponent
+    BooksListComponent,
+    AddBooComponent,
+    AddBookComponent
   ],
   imports: [
     BrowserModule,
